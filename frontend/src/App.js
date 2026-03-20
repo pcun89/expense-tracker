@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import api from "./api";
+import ExpenseForm from "./components/ExpenseForm";
+import ExpenseList from "./components/ExpenseList";
+import ExpenseChart from "./components/ExpenseChart";
 
 function App() {
+
+  const [expenses, setExpenses] = useState([]);
+
+  const fetchExpenses = async () => {
+    const res = await api.get("/expense");
+    setExpenses(res.data);
+  };
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Expense Tracker</h1>
+
+      <ExpenseForm refresh={fetchExpenses} />
+
+      <ExpenseList expenses={expenses} refresh={fetchExpenses} />
+
+      <ExpenseChart expenses={expenses} />
     </div>
   );
 }
