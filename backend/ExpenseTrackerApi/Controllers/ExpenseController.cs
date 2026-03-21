@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ExpenseTracker.Data;
-using ExpenseTracker.Models;
+using ExpenseTrackerApi.Data;
+using ExpenseTrackerApi.Models;
 
 namespace ExpenseTrackerApi.Controllers
 {
@@ -17,13 +17,13 @@ namespace ExpenseTrackerApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Expense>>> getExpenses()
+        public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
         {
             return await _context.Expenses.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Expense>> getExpense(int id)
+        public async Task<ActionResult<Expense>> GetExpense(int id)
         {
             var expense = await _context.Expenses.FindAsync(id);
 
@@ -34,16 +34,16 @@ namespace ExpenseTrackerApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Expense>> createExpense(Expense expense)
+        public async Task<ActionResult<Expense>> CreateExpense(Expense expense)
         {
             _context.Expenses.Add(expense);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(getExpense), new { id = expense.Id }, expense);
+            return CreatedAtAction(nameof(GetExpense), new { id = expense.Id }, expense);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> updateExpense(int id, Expense expense)
+        public async Task<IActionResult> UpdateExpense(int id, Expense expense)
         {
             if (id != expense.Id)
                 return BadRequest();
@@ -55,7 +55,7 @@ namespace ExpenseTrackerApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> deleteExpense(int id)
+        public async Task<IActionResult> DeleteExpense(int id)
         {
             var expense = await _context.Expenses.FindAsync(id);
 
