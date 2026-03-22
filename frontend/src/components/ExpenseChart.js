@@ -8,16 +8,13 @@ const COLORS = [
 ];
 
 const ExpenseChart = ({ expenses }) => {
-    if (!expenses || expenses.length === 0) {
-        return <div>No expenses to display</div>;
-    }
+    if (!expenses || expenses.length === 0) return <div>No expenses to display</div>;
 
-    // Filter invalid amounts and prepare data for individual expenses
     const data = expenses
-        .filter(expense => expense.amount != null && !isNaN(expense.amount))
-        .map((expense, index) => ({
-            name: `${expense.category} - ${expense.description || ""}`, // category + description
-            value: Number(expense.amount),
+        .filter(e => e.amount != null && !isNaN(e.amount))
+        .map((e, i) => ({
+            name: `${e.category} - ${e.description || ""}`,
+            value: Number(e.amount),
         }));
 
     if (data.length === 0) return <div>No valid expenses to display</div>;
@@ -31,13 +28,10 @@ const ExpenseChart = ({ expenses }) => {
                 cx="50%"
                 cy="50%"
                 outerRadius={120}
-                label={({ name }) => name || ""}
+                label={({ name }) => name}
             >
                 {data.map((entry, index) => (
-                    <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length] || "#8884d8"}
-                    />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
             </Pie>
             <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />

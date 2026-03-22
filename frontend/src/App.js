@@ -5,28 +5,35 @@ import ExpenseList from "./components/ExpenseList";
 import ExpenseChart from "./components/ExpenseChart";
 
 function App() {
-
   const [expenses, setExpenses] = useState([]);
 
   const fetchExpenses = async () => {
-    const res = await api.get("/expense");
-    setExpenses(res.data);
+    try {
+      const res = await api.get("/expense");
+      setExpenses(res.data);
+    } catch (err) {
+      console.error("Failed to fetch expenses:", err);
+    }
   };
 
   useEffect(() => {
     fetchExpenses();
   }, []);
-  
 
   return (
-    <div>
-      <h1>Expense Tracker</h1>
+    <div style={{ maxWidth: "900px", margin: "auto", fontFamily: "Arial, sans-serif" }}>
+      <h1 style={{ textAlign: "center", color: "#333" }}>Expense Tracker</h1>
 
       <ExpenseForm refresh={fetchExpenses} />
 
-      <ExpenseList expenses={expenses} refresh={fetchExpenses} />
-
-      <ExpenseChart expenses={expenses} />
+      <div style={{ display: "flex", flexDirection: "row", marginTop: "20px", gap: "20px" }}>
+        <div style={{ flex: 1 }}>
+          <ExpenseList expenses={expenses} refresh={fetchExpenses} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <ExpenseChart expenses={expenses} />
+        </div>
+      </div>
     </div>
   );
 }
