@@ -1,36 +1,49 @@
 import React from "react";
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-function ExpenseChart({ expenses }) {
+const COLORS = [
+    "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28EFF", "#FF6F91",
+    "#FF9F40", "#2ECC71", "#DFFF00", "#FF7F50", "#6495ED", "#FF69B4",
+    "#BA55D3", "#87CEFA", "#20B2AA", "#FF6347", "#40E0D0", "#FFD700",
+];
 
-    const categoryTotals = {};
+const ExpenseChart = ({ expenses }) => {
+    if (!expenses || expenses.length === 0) {
+        return <div>No expenses to display</div>;
+    }
 
-    expenses.forEach(exp => {
-        categoryTotals[exp.category] =
-            (categoryTotals[exp.category] || 0) + exp.amount;
-    });
+    // Filter invalid amounts and prepare data for individual expenses
+    const data = expenses
+        .filter(expense => expense.amount != null && !isNaN(expense.amount))
+        .map((expense, index) => ({
+            name: `${expense.category} - ${expense.description || ""}`, // category + description
+            value: Number(expense.amount),
+        }));
 
-    const data = Object.keys(categoryTotals).map(key => ({
-        name: key,
-        value: categoryTotals[key]
-    }));
+    if (data.length === 0) return <div>No valid expenses to display</div>;
 
     return (
-        <PieChart width={400} height={400}>
+        <PieChart width={500} height={400}>
             <Pie
                 data={data}
                 dataKey="value"
                 nameKey="name"
-                outerRadius={150}
-                label
+                cx="50%"
+                cy="50%"
+                outerRadius={120}
+                label={({ name }) => name || ""}
             >
                 {data.map((entry, index) => (
-                    <Cell key={index} />
+                    <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length] || "#8884d8"}
+                    />
                 ))}
             </Pie>
-            <Tooltip />
+            <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+            <Legend />
         </PieChart>
     );
-}
+};
 
 export default ExpenseChart;
