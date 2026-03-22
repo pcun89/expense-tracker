@@ -1,8 +1,5 @@
-// src/api.js
 import axios from "axios";
 
-const api = axios.create({
-    baseURL: "http://localhost:5193/api", // your backend base URL
+export default axios.create({
+    baseURL: "https://expense-tracker-backend-xxxxx-uc.a.run.app/api"
 });
-
-export default api;
