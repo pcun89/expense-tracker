@@ -16,7 +16,7 @@ const ExpenseList = ({ expenses, refresh }) => {
             category: expense.category,
             description: expense.description,
             amount: expense.amount,
-            date: expense.date.split("T")[0], // format yyyy-mm-dd
+            date: expense.date.split("T")[0],
         });
     };
 
@@ -26,49 +26,43 @@ const ExpenseList = ({ expenses, refresh }) => {
         refresh();
     };
 
-    // ====== Add this: calculate total ======
-    const total = expenses.reduce((sum, exp) => sum + Number(exp.amount), 0);
+    const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
 
     return (
         <div>
             <h2>Expenses</h2>
-            <ul style={{ listStyle: "disc", paddingLeft: "20px" }}>
+
+            <ul style={{ listStyle: "none", padding: 0 }}>
                 {expenses.map(exp => (
-                    <li key={exp.id} style={{ marginBottom: "10px" }}>
+                    <li key={exp.id} className="card" style={{ padding: "10px" }}>
                         {editingId === exp.id ? (
-                            <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
-                                <input
-                                    type="text"
-                                    value={editData.category}
+                            <div>
+                                <input value={editData.category}
                                     onChange={(e) => setEditData({ ...editData, category: e.target.value })}
-                                    placeholder="Category"
                                 />
-                                <input
-                                    type="text"
-                                    value={editData.description}
+                                <input value={editData.description}
                                     onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                                    placeholder="Description"
                                 />
-                                <input
-                                    type="number"
-                                    value={editData.amount}
+                                <input type="number" value={editData.amount}
                                     onChange={(e) => setEditData({ ...editData, amount: Number(e.target.value) })}
-                                    placeholder="Amount"
                                 />
-                                <input
-                                    type="date"
-                                    value={editData.date}
+                                <input type="date" value={editData.date}
                                     onChange={(e) => setEditData({ ...editData, date: e.target.value })}
                                 />
-                                <button onClick={() => handleSave(exp.id)}>Save</button>
+
+                                <button className="btn-primary" onClick={() => handleSave(exp.id)}>Save</button>
                                 <button onClick={() => setEditingId(null)}>Cancel</button>
                             </div>
                         ) : (
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <span>{exp.category} - {exp.description || ""} - ${Number(exp.amount).toFixed(2)} - {new Date(exp.date).toLocaleDateString()}</span>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <span>
+                                    <strong>{exp.category}</strong> - {exp.description} - ${exp.amount} -{" "}
+                                    {new Date(exp.date).toLocaleDateString()}
+                                </span>
+
                                 <div>
-                                    <button onClick={() => handleEdit(exp)} style={{ marginRight: "5px" }}>Edit</button>
-                                    <button onClick={() => handleDelete(exp.id)}>Delete</button>
+                                    <button className="btn-edit" onClick={() => handleEdit(exp)}>Edit</button>
+                                    <button className="btn-danger" onClick={() => handleDelete(exp.id)}>Delete</button>
                                 </div>
                             </div>
                         )}
@@ -76,10 +70,7 @@ const ExpenseList = ({ expenses, refresh }) => {
                 ))}
             </ul>
 
-            {/* ====== Display total ====== */}
-            <div style={{ marginTop: "15px", fontWeight: "bold", fontSize: "16px" }}>
-                Total Expenses: ${total.toFixed(2)}
-            </div>
+            <div className="total">Total: ${total.toFixed(2)}</div>
         </div>
     );
 };

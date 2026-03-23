@@ -3,17 +3,14 @@ import api from "./api";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import ExpenseChart from "./components/ExpenseChart";
+import "./styles.css";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
 
   const fetchExpenses = async () => {
-    try {
-      const res = await api.get("/expense");
-      setExpenses(res.data);
-    } catch (err) {
-      console.error("Error fetching expenses:", err);
-    }
+    const res = await api.get("/expense");
+    setExpenses(res.data);
   };
 
   useEffect(() => {
@@ -21,12 +18,20 @@ function App() {
   }, []);
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h1>Expense Tracker</h1>
+    <div className="container">
+      <h1>💰 Expense Tracker</h1>
 
-      <ExpenseForm refresh={fetchExpenses} />
-      <ExpenseList expenses={expenses} refresh={fetchExpenses} />
-      <ExpenseChart expenses={expenses} />
+      <div className="card">
+        <ExpenseForm refresh={fetchExpenses} />
+      </div>
+
+      <div className="card">
+        <ExpenseList expenses={expenses} refresh={fetchExpenses} />
+      </div>
+
+      <div className="card">
+        <ExpenseChart expenses={expenses} />
+      </div>
     </div>
   );
 }
