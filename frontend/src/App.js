@@ -8,7 +8,12 @@ import "./styles.css";
 function App() {
   const [expenses, setExpenses] = useState([]);
 
-  const fetchExpenses = async () => {
+  const fetchExpenses = async (overrideData = null) => {
+    if (overrideData) {
+      setExpenses(overrideData);
+      return;
+    }
+
     const res = await api.get("/expense");
     setExpenses(res.data);
   };
