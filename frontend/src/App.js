@@ -3,6 +3,7 @@ import api from "./api";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import ExpenseChart from "./components/ExpenseChart";
+import MonthlyChart from "./components/MonthlyChart";
 import "./styles.css";
 
 function App() {
@@ -36,6 +37,9 @@ function App() {
 
       <div className="card">
         <ExpenseChart expenses={expenses} />
+      </div>
+      <div className="card">
+        <MonthlyChart expenses={expenses} />
       </div>
     </div>
   );
